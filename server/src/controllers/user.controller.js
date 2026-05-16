@@ -76,6 +76,25 @@ catch (error) {
 
 // get details of current logged in user
 
+const getCUrrentUser =  async(req,res)=>{
+    try {
+        const user = req.user;
+        return res.status(200).json({success:true, user});
+    } catch (error) {        
+        console.log(error);
+        return res.status(500).json({success:false, message:"Internal server error"});
+    }
+}
+
+const getAllUsers = async(req,res) => {
+    try {
+        const users = await User.find({_id:{$ne:req.user._id}}).select("-password");  
+        return res.status(200).json({success:true, users});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({success:false, message:"Internal server error"});
+    }       
+}
 
 
 
