@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import User from '../models/user.model.js';
 
 
 const authMiddleware = async (req,res,next) => {
@@ -10,7 +11,7 @@ const authMiddleware = async (req,res,next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
         const user = await User.findById(decoded._id);
         if(!user){
-            return res.status(401).json({success:false, message:"Unauthorized"});
+            return res.status(401).json({success:false, message:"Unauthorized1"});
         }
 
         req.user = user;

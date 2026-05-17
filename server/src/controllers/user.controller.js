@@ -1,5 +1,5 @@
 import User from "../models/user.model.js";
-import valodator from 'validator';
+import validator from 'validator';
 // import valdator from 'validator';
 
 const loginUser = async( req, res) => {
@@ -46,11 +46,11 @@ const registerUser = async(req, res) => {
         return res.status(400).json({success:false, message:" my user User already exists"});
     }
     // validating email format strong password
-    if(!valdator.isEmail(email)){
+    if(!validator.isEmail(email)){
         return res.status(400).json({success:false, message:"Invalid email format"});
     }
 
-    if(!valdator.isStrongPassword(password)){
+    if(!validator.isStrongPassword(password)){
         return res.status(400).json({success:false, message:`Password must be at least 8 characters long and contain at least one
              uppercase letter, one lowercase letter, one number, and one symbol`});
     }
@@ -79,10 +79,11 @@ catch (error) {
 const getCUrrentUser =  async(req,res)=>{
     try {
         const user = req.user;
-        return res.status(200).json({success:true, user});
+        console.log(user);
+        return res.status(200).json({success:true, message:"Current user details", user:user});
     } catch (error) {        
         console.log(error);
-        return res.status(500).json({success:false, message:"Internal server error"});
+        return res.status(500).json({success:false, error: error.message, message:"Internal server error"});
     }
 }
 
@@ -95,9 +96,6 @@ const getAllUsers = async(req,res) => {
         return res.status(500).json({success:false, message:"Internal server error"});
     }       
 }
-
-
-
 export {
     registerUser,
     loginUser,
