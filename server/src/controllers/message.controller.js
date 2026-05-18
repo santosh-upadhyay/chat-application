@@ -30,4 +30,16 @@ const createmessage = async (req, res) => {
     }   
 }
 
-export default createmessage;
+
+const getAllMessages = async(req,res)=>{
+    try {
+        const chat = req.params.chatId;
+        const allmessages = await Message.find({chatId:chat}).sort({createdAt:1});
+
+        res.status(200).json(new ApiResponse(200,"messages fetched successfully", allmessages))
+    } catch (error) {
+        res.status(500).json(new ApiError(500,"server error", error, error.stack))
+    }
+}
+
+export { createmessage, getAllMessages };
