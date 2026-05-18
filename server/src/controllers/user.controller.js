@@ -18,7 +18,7 @@ const loginUser = async( req, res) => {
 
     const isPasswordCorrect = await user.isPasswordCorrect(password);
     if(!isPasswordCorrect){
-        return res.status(400).json({success:false, message:"Invalid credentials"});    
+        return res.status(400).json({success:false, message:"Invalid email or password credentials"});    
     }
 //    console.log(process.env.JWT_SECRET_KEY);
         const token = user.generateToken();
