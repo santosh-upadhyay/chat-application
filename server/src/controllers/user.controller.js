@@ -78,9 +78,10 @@ catch (error) {
 
 const getCUrrentUser =  async(req,res)=>{
     try {
-        const user = req.user;
-        console.log(user);
-        return res.status(200).json({success:true, message:"Current user details", user:user});
+        // const user = req.user;
+        const user = await User.findOne({_id:req.user._id}).select("-password");
+        // console.log(user);
+        return res.status(200).json({success:true, message:"Current user details", data:user});
     } catch (error) {        
         console.log(error);
         return res.status(500).json({success:false, error: error.message, message:"Internal server error"});
@@ -90,7 +91,7 @@ const getCUrrentUser =  async(req,res)=>{
 const getAllUsers = async(req,res) => {
     try {
         const users = await User.find({_id:{$ne:req.user._id}}).select("-password");  
-        return res.status(200).json({success:true, users});
+        return res.status(200).json({success:true, data:users});
     } catch (error) {
         console.log(error);
         return res.status(500).json({success:false, message:"Internal server error"});

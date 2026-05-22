@@ -1,16 +1,29 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { loginUser } from "../../apiCalls/auth";
+import { toast } from "react-hot-toast";
 function Login() {         
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const [user, setUser] = useState({
         email: '',
         password: ''
     });
 
-    function onFormSubmit(e) {
+    async function onFormSubmit(e) {
         e.preventDefault(); 
-        console.log(user);  
-        
+        try{
+        const response = await loginUser(user);
+        if(response.success){
+            localStorage.setItem('token', response.token);
+            toast.success(response.message);
+            window.location.href = '/';
+        }else{
+            toast.error(response.message);
+        }
+        // console.log(user);  
+        }catch(error){
+            toast.error('Something went wrong. Please try again later.');
+        }  
     }
 
     return (
