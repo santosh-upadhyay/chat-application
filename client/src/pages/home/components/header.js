@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 function Header() {
 
     const { user } = useSelector((state) => state.usersReducer);
-    console.log("user in header", user);
+    // console.log("user in header", user);
     function getFullName(){
         if(!user) return "";
         let fname = user?.firstname.toUpperCase();
