@@ -3,14 +3,19 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { getLoggedUser } from '../apiCalls/users';
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { hideLoader, showLoader } from '../redux/loaderSlice';
 
 function ProjectedRoute({ children }) {
     const [user, setUser] = useState(null);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const getLoggedInUser = async() => {
         try{
+            dispatch(showLoader());
             const response = await getLoggedUser();
+            dispatch(hideLoader());
             if(response.success){
                 setUser(response.data);
                 // document.write("Welcome "+response.data.firstname);
@@ -20,6 +25,7 @@ function ProjectedRoute({ children }) {
             }
         }catch(error){
             // toast.error('Failed to fetch user details');
+            dispatch(hideLoader());
             navigate('/login');
         }
     }
@@ -38,7 +44,7 @@ function ProjectedRoute({ children }) {
     return (
         <div>
 
-            <p>Name: {user?.firstname + ' ' + user?.lastname}</p>
+            {/* <p>Name: {user?.firstname + ' ' + user?.lastname}</p> */}
             <p>{children}</p>
         </div>
 
