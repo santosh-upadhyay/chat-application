@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { getLoggedUser } from '../apiCalls/users';
 import toast from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { hideLoader, showLoader } from '../redux/loaderSlice';
+import { setUser } from '../redux/usersSlice';
 
 function ProjectedRoute({ children }) {
-    const [user, setUser] = useState(null);
+    const { user } = useSelector((state) => state.usersReducer);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -17,10 +18,11 @@ function ProjectedRoute({ children }) {
             const response = await getLoggedUser();
             dispatch(hideLoader());
             if(response.success){
-                setUser(response.data);
+                dispatch(setUser(response.data));
                 // document.write("Welcome "+response.data.firstname);
                 // toast.success("jai ho"+response.data.message);
             }else{
+                toast.error(response.message);
                 navigate('/login');
             }
         }catch(error){
