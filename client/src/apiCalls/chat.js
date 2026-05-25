@@ -1,5 +1,6 @@
 import { axiosInstance } from ".";
 
+// Fetch all chats for the current user
 const getAllChats = async () => {
   try {
     const response = await axiosInstance.get("/api/chat/all-chats");
@@ -9,6 +10,8 @@ const getAllChats = async () => {
     throw error;
   }
 };
+
+// Create a new chat with specified members
 
 const createNewChat = async (members) => {
   try {

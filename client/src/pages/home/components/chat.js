@@ -1,9 +1,35 @@
 import { useDispatch, useSelector } from "react-redux";
+import { createNewMessage } from "../../../apiCalls/message";
+import { useState } from "react";
 
 function ChatArea() {
-  const { selectedChat,user } = useSelector((state) => state.usersReducer);
-  const selectedUser = selectedChat.members.find(u=> u._id !== user._id )
+  const { selectedChat, user } = useSelector((state) => state.usersReducer);
+  const selectedUser = selectedChat.members.find((u) => u._id !== user._id);
   const dispatch = useDispatch();
+  const [message, setMessage] = useState("");
+
+  // TODO: Implement the logic to send a message
+  const sendMessage = async () => {
+    // Implement the logic to send a message here
+    try {
+      const newMessage = {
+        chat: selectedChat._id,
+        sender: user._id,
+        text: message,
+      };
+      // dispatch(showLoader());
+      const response = await createNewMessage({ newMessage });
+      // dispatch(hideLoader());
+      if (response.success){
+        setMessage("");
+      }
+      return response;
+    } catch (error) {
+      console.error("Error sending message:", error);
+      throw error;
+    }
+  };
+
   return (
     <>
       {/* <h2>Chat Area</h2> */}
@@ -13,13 +39,23 @@ function ChatArea() {
             {/* <!--RECEIVER DATA--> */}
             {selectedUser.firstname} {selectedUser.lastname}
           </div>
-          <div>
+          <div className="main-chat-area">
             {/* <!--Chat Area--> */}
             CHAT AREA
           </div>
-          <div>
-            {/* <!--SEND MESSAGE--> */}
-            SEND MESSAGE
+          <div class="send-message-div">
+            <input
+              type="text"
+              className="send-message-input"
+              placeholder="Type a message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <button
+              className="fa fa-paper-plane send-message-btn"
+              aria-hidden="true"
+              onClick={sendMessage}
+            ></button>
           </div>
         </div>
       )}
