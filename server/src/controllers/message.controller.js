@@ -32,7 +32,7 @@ const createmessage = async (req, res) => {
     );
     res
       .status(201)
-      .json(new ApiResponse(201, "message created successfully", savedMessage));
+      .json(new ApiResponse(201,savedMessage ,"message created successfully"));
   } catch (error) {
     res.status(500).json(new ApiError(500, "server error", error, error.stack));
   }
@@ -47,7 +47,7 @@ const getAllMessages = async (req, res) => {
 
     res
       .status(200)
-      .json(new ApiResponse(200, "messages fetched successfully", allmessages));
+      .json(new ApiResponse(200, allmessages, "messages fetched successfully"));
   } catch (error) {
     res.status(500).json(new ApiError(500, "server error", error, error.stack));
   }

@@ -21,7 +21,7 @@ function ChatArea() {
       // dispatch(showLoader());
       const response = await createNewMessage({ newMessage });
       // dispatch(hideLoader());
-      if (response.success){
+      if (response.success) {
         setMessage("");
       }
       return response;
@@ -31,15 +31,16 @@ function ChatArea() {
     }
   };
 
+  // TODO: Implement the logic to fetch messages for the selected chat
   const getMessages = async () => {
     // Implement the logic to send a message here
     try {
       // dispatch(showLoader());
       const response = await getAllMessages(selectedChat._id);
       // dispatch(hideLoader());
-     if (response.success){
-      setAllMessages(response.data);
-     }
+      if (response.success) {
+        setAllMessages(response.data);
+      }
     } catch (error) {
       console.error("Error sending message:", error);
       throw error;
@@ -47,23 +48,28 @@ function ChatArea() {
   };
 
   useEffect(() => {
-      getMessages()
+    getMessages();
   }, [selectedChat]);
 
   return (
     <>
       {/* <h2>Chat Area</h2> */}
       {selectedChat && (
-        <div class="app-chat-area">
-          <div class="app-chat-area-header">
+        <div className="app-chat-area">
+          <div className="app-chat-area-header">
             {/* <!--RECEIVER DATA--> */}
             {selectedUser.firstname} {selectedUser.lastname}
           </div>
           <div className="main-chat-area">
             {/* <!--Chat Area--> */}
-            CHAT AREA
+            {allMessages.map(msg=>{
+              const isCurrentUserSender = msg.senderId === user._id
+              return <div className="message-container" style={isCurrentUserSender ? { justifyContent: "end" } : { justifyContent: "start" }}>
+              <div className={isCurrentUserSender ? "send-message" : "received-message"}>{msg.text}</div>
+            </div>
+            })}  
           </div>
-          <div class="send-message-div">
+          <div className="send-message-div">
             <input
               type="text"
               className="send-message-input"
