@@ -9,4 +9,14 @@ const createNewMessage = async (message) => {
   }
 };
 
-export { createNewMessage };
+const getAllMessages = async (chatId) => {
+  try {
+    const response = await axiosInstance.get(`/api/message/all-messages/${chatId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    throw error;
+  }
+};
+
+export { createNewMessage, getAllMessages };

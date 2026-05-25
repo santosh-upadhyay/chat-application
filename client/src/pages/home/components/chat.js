@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { createNewMessage } from "../../../apiCalls/message";
-import { useState } from "react";
+import { createNewMessage, getAllMessages } from "../../../apiCalls/message";
+import { useEffect, useState } from "react";
 
 function ChatArea() {
   const { selectedChat, user } = useSelector((state) => state.usersReducer);
   const selectedUser = selectedChat.members.find((u) => u._id !== user._id);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
+  const [allMessages, setAllMessages] = useState([]);
 
   // TODO: Implement the logic to send a message
   const sendMessage = async () => {
@@ -29,6 +30,25 @@ function ChatArea() {
       throw error;
     }
   };
+
+  const getMessages = async () => {
+    // Implement the logic to send a message here
+    try {
+      // dispatch(showLoader());
+      const response = await getAllMessages(selectedChat._id);
+      // dispatch(hideLoader());
+     if (response.success){
+      setAllMessages(response.data);
+     }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+      getMessages()
+  }, [selectedChat]);
 
   return (
     <>
