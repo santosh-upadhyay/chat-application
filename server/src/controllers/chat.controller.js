@@ -20,7 +20,8 @@ import ApiResponse from '../utils/ApiResponse.js';
 
 const getAllChats = async (req, res) => {
     try{
-        const chats = await Chat.find({members: {$in: [req.user._id]}}) 
+        const chats = await Chat.find({members: {$in: [req.user._id]}})
+        .populate("members", "-password").sort({ updatedAt: -1 });
         
         res.status(200).json(new ApiResponse(200, chats, "Chats fetched successfully", true));
     
