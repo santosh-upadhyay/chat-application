@@ -48,10 +48,9 @@ function UsersList({ users, searchKey, setSearchKey }) {
   }
   const getLastMessageTimeStamp = (userId)=>{
     const chat = allChats.find((chat) => chat.members.map(m=>m._id).includes(userId))
-    if(!chat && chat?.lastMessage) return "";
+    if(!chat || chat?.lastMessage) return "";
     return moment(chat.lastMessage?.createdAt).format("hh:mm A")
     // .fromNow();
-
   }
 
   const getlastMessage = (userId)=>{
