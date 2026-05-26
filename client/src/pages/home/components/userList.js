@@ -61,6 +61,15 @@ function UsersList({ users, searchKey, setSearchKey }) {
     return msgprefix + (chat?.lastMessage?.text || "").substring(0, 15);
   }
 
+  // get unread message count for each chat
+  const getUnreadMessageCount = (userId)=>{
+    const chat = allChats.find((chat) => chat.members.map(m=>m._id).includes(userId))
+    if(chat && chat.unreadMessagesCount && chat.lastMessage?.senderId !== currentUser._id) {
+      return <div className="unread-message-counter"> {chat.unreadMessagesCount}</div>;
+    }
+    return "";
+  }
+
   // filter users based on search key and existing chats
   return allUsers
     .filter((user) => {
@@ -98,7 +107,10 @@ function UsersList({ users, searchKey, setSearchKey }) {
                 </div>
                 <div className="user-display-email">{getlastMessage(user._id) || user.email}</div>
               </div>
+              <div>
+              {getUnreadMessageCount(user._id)}
               <div className="last-message-timestamp">{ getLastMessageTimeStamp(user._id)}</div>
+              </div>
               {!allChats.find((chat) => chat.members.map(m=>m._id).includes(user._id)) && (
                 <div className="user-start-chat">
                   <button

@@ -2,10 +2,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { createNewMessage, getAllMessages } from "../../../apiCalls/message";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { clearUnreadMessageCount } from "../../../apiCalls/chat";
 
 
 function ChatArea() {
-  const { selectedChat, user } = useSelector((state) => state.usersReducer);
+  const { selectedChat, user, allChats } = useSelector((state) => state.usersReducer);
   const selectedUser = selectedChat.members.find((u) => u._id !== user._id);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
@@ -47,7 +48,6 @@ function ChatArea() {
   };
   // TODO: Implement the logic to fetch messages for the selected chat
   const getMessages = async () => {
-    // Implement the logic to send a message here
     try {
       // dispatch(showLoader());
       const response = await getAllMessages(selectedChat._id);
@@ -60,9 +60,31 @@ function ChatArea() {
       throw error;
     }
   };
+// TODO: Implement the logic to clear unread message count when a chat is opened
+  const clearUnreadMessages = async () => {
+    try {
+      // dispatch(showLoader());
+      const response = await clearUnreadMessageCount(selectedChat._id);
+      // dispatch(hideLoader());
+      if (response.success) {
+        allChats.map((chat) => {
+          if (chat._id === selectedChat._id) {
+            return response.data;
+          }
+          return chat;
+        });
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      throw error;
+    }
+  };
 
   useEffect(() => {
     getMessages();
+    if(selectedChat.lastMessage?.senderId!== user._id ) {
+      clearUnreadMessages();
+    }
   }, [selectedChat]);
 
   return (
