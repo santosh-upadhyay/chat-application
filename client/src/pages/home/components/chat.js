@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { createNewMessage, getAllMessages } from "../../../apiCalls/message";
 import { useEffect, useState } from "react";
+import moment from "moment";
+
 
 function ChatArea() {
   const { selectedChat, user } = useSelector((state) => state.usersReducer);
@@ -31,6 +33,18 @@ function ChatArea() {
     }
   };
 
+  const formattime = (timestamp) => {
+    const now = moment();
+    const diff = now.diff(moment(timestamp), "days");
+    if (diff < 1) {
+      return `Today ${moment(timestamp).format("h:mm A")}`;
+    } else if (diff === 1) {
+      return `Yesterday ${moment(timestamp).format("h:mm A")}`;
+    } else {
+      return moment(timestamp).format("MMM , YYYY h:mm A");
+    }
+
+  };
   // TODO: Implement the logic to fetch messages for the selected chat
   const getMessages = async () => {
     // Implement the logic to send a message here
@@ -64,8 +78,13 @@ function ChatArea() {
             {/* <!--Chat Area--> */}
             {allMessages.map(msg=>{
               const isCurrentUserSender = msg.senderId === user._id
-              return <div className="message-container" style={isCurrentUserSender ? { justifyContent: "end" } : { justifyContent: "start" }}>
+              return <div className="message-container" 
+              style={isCurrentUserSender ? { justifyContent: "end" } : { justifyContent: "start" }}>
+                <div>
               <div className={isCurrentUserSender ? "send-message" : "received-message"}>{msg.text}</div>
+              <div className="message-timestamp" style={isCurrentUserSender?{float:"right"}:{float:"left"}}>
+                {formattime(msg.createdAt)}</div>
+              </div>
             </div>
             })}  
           </div>

@@ -3,6 +3,7 @@ import { createNewChat } from "../../../apiCalls/chat";
 import { hideLoader, showLoader } from "../../../redux/loaderSlice";
 import { setAllChats, setSelectedChat } from "../../../redux/usersSlice";
 import toast from "react-hot-toast";
+import moment from "moment";
 
 function UsersList({ users, searchKey, setSearchKey }) {
   const {
@@ -45,6 +46,20 @@ function UsersList({ users, searchKey, setSearchKey }) {
     if(!selectedChat) return false;
     return selectedChat.members.map(m=>m._id).includes(user._id)
   }
+  const getLastMessageTimeStamp = (userId)=>{
+    const chat = allChats.find((chat) => chat.members.map(m=>m._id).includes(userId))
+    if(!chat && chat?.lastMessage) return "";
+    return moment(chat.lastMessage?.createdAt).format("hh:mm A")
+    // .fromNow();
+
+  }
+
+  const getlastMessage = (userId)=>{
+    const chat = allChats.find((chat) => chat.members.map(m=>m._id).includes(userId))
+    if(!chat) return "";
+    const msgprefix = chat.lastMessage?.senderId === currentUser._id ? "You: " : "";
+    return msgprefix + (chat?.lastMessage?.text || "").substring(0, 15);
+  }
 
   // filter users based on search key and existing chats
   return allUsers
@@ -81,9 +96,9 @@ function UsersList({ users, searchKey, setSearchKey }) {
                 <div className="user-display-name">
                   {user.firstname} {user.lastname}
                 </div>
-                <div className="user-display-email">{user.email}</div>
+                <div className="user-display-email">{getlastMessage(user._id) || user.email}</div>
               </div>
-
+              <div className="last-message-timestamp">{ getLastMessageTimeStamp(user._id)}</div>
               {!allChats.find((chat) => chat.members.map(m=>m._id).includes(user._id)) && (
                 <div className="user-start-chat">
                   <button
