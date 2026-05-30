@@ -3,9 +3,9 @@ import { createNewMessage, getAllMessages } from "../../../apiCalls/message";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { clearUnreadMessageCount } from "../../../apiCalls/chat";
+import store from "../../../redux/store";
 
-
-function ChatArea() {
+function ChatArea({socket}) {
   const { selectedChat, user, allChats } = useSelector((state) => state.usersReducer);
   const selectedUser = selectedChat.members.find((u) => u._id !== user._id);
   const dispatch = useDispatch();
@@ -21,9 +21,18 @@ function ChatArea() {
         sender: user._id,
         text: message,
       };
-      // dispatch(showLoader());
+
+      // Emit the message to the server using Socket.IO
+      socket.emit('send-message',
+        {...newMessage,
+          members: selectedChat.members.map((member) => member._id),
+          read: false,
+          createdAt: moment().format('YYYY-MM-DD HH:mm:ss')
+        }
+      )
+
       const response = await createNewMessage({ newMessage });
-      // dispatch(hideLoader());
+
       if (response.success) {
         setMessage("");
       }
@@ -84,9 +93,32 @@ function ChatArea() {
     getMessages();
     if(selectedChat?.lastMessage?.senderId!== user._id ) {
       clearUnreadMessages();
-    }
+    } 
+   
+   
+    socket.off('receive-message').on('receive-message',(data)=>{
+       const selectedChat = store.getState().usersReducer.selectedChat;
+       if (selectedChat._id===data.chat) {
+      // setAllMessages((prevMessages => [...prevMessages, data]));
+      setAllMessages((prevMessages) => [...prevMessages, {
+      ...data,
+      chatId: data.chat,       // normalize for render
+      senderId: data.sender 
+    }]);
+       }
+    })
+
+    // alert('useEffect called',d1);
+    // return () => socket.off('receive-message')
+  
   }, [selectedChat]);
 
+  useEffect(() => {
+    const msgContainer = document.getElementById("main-chat-area");
+    if (msgContainer) {
+      msgContainer.scrollTop = msgContainer.scrollHeight;
+    }
+  }, [allMessages]);
   return (
     <>
       {/* <h2>Chat Area</h2> */}
@@ -96,7 +128,7 @@ function ChatArea() {
             {/* <!--RECEIVER DATA--> */}
             {selectedUser.firstname} {selectedUser.lastname}
           </div>
-          <div className="main-chat-area">
+          <div className="main-chat-area" id="main-chat-area">
             {/* <!--Chat Area--> */}
             {allMessages.map(msg=>{
               const isCurrentUserSender = msg.senderId === user._id
