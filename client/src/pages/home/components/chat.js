@@ -12,6 +12,7 @@ function ChatArea({socket}) {
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
   const [allMessages, setAllMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
 
   // TODO: Implement the logic to send a message
   const sendMessage = async () => {
@@ -147,6 +148,14 @@ function ChatArea({socket}) {
       }
     })
 
+    socket.on('started-typing',(data)=>{
+      if(data.chatId === selectedChat._id && data.senderId !== user._id) {
+        setIsTyping(true);
+        setTimeout(()=>{
+          setIsTyping(false);
+        },2000)
+      }
+    })
     // alert('useEffect called',d1);
     // return () => socket.off('receive-message')
   
@@ -157,7 +166,7 @@ function ChatArea({socket}) {
     if (msgContainer) {
       msgContainer.scrollTop = msgContainer.scrollHeight;
     }
-  }, [allMessages]);
+  }, [allMessages,isTyping]);
   return (
     <>
       {/* <h2>Chat Area</h2> */}
@@ -182,6 +191,9 @@ function ChatArea({socket}) {
               </div>
             </div>
             })}  
+            {isTyping && (
+              <div><i>typing...</i></div>
+            )}
           </div>
           <div className="send-message-div">
             <input
@@ -189,7 +201,14 @@ function ChatArea({socket}) {
               className="send-message-input"
               placeholder="Type a message"
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                socket.emit('user-typing',{
+                  chatId: selectedChat._id,
+                  members: selectedChat.members.map((member) => member._id),
+                  senderId: user._id
+                })
+              }}
             />
             <button
               className="fa fa-paper-plane send-message-btn"

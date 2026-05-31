@@ -44,7 +44,11 @@ io.on('connection',(socket)=>{
 
     socket.on('clear-unread-messages',(data)=>{
         io.to(data.members[0]).to(data.members[1]).emit('message-count-cleared',data);
-        console.log(data);
+        // console.log(data);
+    })
+    socket.on('user-typing',(data)=>{
+        socket.to(data.members.filter(m=>m!==data.senderId)[0]).emit('started-typing',data);
+        // console.log(data);
     })
 
     
