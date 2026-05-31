@@ -4,8 +4,10 @@ import { hideLoader, showLoader } from "../../../redux/loaderSlice";
 import { setAllChats, setSelectedChat } from "../../../redux/usersSlice";
 import toast from "react-hot-toast";
 import moment from "moment";
+import store from "../../../redux/store";
+import { useEffect } from "react";
 
-function UsersList({ users, searchKey, setSearchKey }) {
+function UsersList({ users, searchKey, setSearchKey, socket }) {
   const {
     allUsers,
     allChats,
@@ -48,7 +50,7 @@ function UsersList({ users, searchKey, setSearchKey }) {
   }
   const getLastMessageTimeStamp = (userId)=>{
     const chat = allChats.find((chat) => chat.members.map(m=>m._id).includes(userId))
-    if(!chat || chat?.lastMessage) return "";
+    if(!chat || !chat?.lastMessage) return "";
     return moment(chat.lastMessage?.createdAt).format("hh:mm A")
     // .fromNow();
   }
@@ -59,6 +61,38 @@ function UsersList({ users, searchKey, setSearchKey }) {
     const msgprefix = chat.lastMessage?.senderId === currentUser._id ? "You: " : "";
     return msgprefix + (chat?.lastMessage?.text || "").substring(0, 15);
   }
+// {
+//   chat: '6a09f528bad54efc557cb3ea',
+//   sender: '6a08511ddf46f205c136b217',
+//   text: 'hii',
+//   members: [ '6a08511ddf46f205c136b217', '6a09f48ebad54efc557cb3e8' ],
+//   read: false,
+//   createdAt: '2026-05-31 17:47:59'
+// }
+  useEffect(() => {
+    socket.off('receive-message').on('receive-message',(message)=>{
+       const selectedChat = store.getState().usersReducer.selectedChat;
+       const allChats = store.getState().usersReducer.allChats;
+      //  console.log('Message received:', message);
+        if (selectedChat?._id !== message.chat) {
+          const updatedChats = allChats.map((Chat) => {
+            if(Chat._id === message.chat){
+              return {
+                ...Chat,
+                unreadMessagesCount: (Chat?.unreadMessagesCount || 0) + 1,
+                lastMessage: message,
+              }
+            }
+            console.log(Chat);
+            return Chat;
+        })
+        dispatch(setAllChats(updatedChats));
+      }
+    })
+  //    socket.on('receive-message', handleReceiveMessage);
+  // return () => socket.off('receive-message', handleReceiveMessage);
+
+  }, [allChats])
 
   // get unread message count for each chat
   const getUnreadMessageCount = (userId)=>{

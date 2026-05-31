@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import { clearUnreadMessageCount } from "../../../apiCalls/chat";
 import store from "../../../redux/store";
+import { setAllChats } from "../../../redux/usersSlice";
 
 function ChatArea({socket}) {
   const { selectedChat, user, allChats } = useSelector((state) => state.usersReducer);
@@ -63,6 +64,7 @@ function ChatArea({socket}) {
       // dispatch(hideLoader());
       if (response.success) {
         setAllMessages(response.data);
+        // console.log(response.data);
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -72,16 +74,20 @@ function ChatArea({socket}) {
 // TODO: Implement the logic to clear unread message count when a chat is opened
   const clearUnreadMessages = async () => {
     try {
-      // dispatch(showLoader());
+      socket.emit('clear-unread-messages', {
+        chat: selectedChat._id,
+        members: selectedChat.members.map((member) => member._id)
+      });
       const response = await clearUnreadMessageCount(selectedChat._id);
-      // dispatch(hideLoader());
+
       if (response.success) {
-        allChats.map((chat) => {
+       const updatedChats =  allChats.map((chat) => {
           if (chat._id === selectedChat._id) {
             return response.data;
           }
           return chat;
         });
+          dispatch(setAllChats(updatedChats)); //->>>>>>
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -96,16 +102,49 @@ function ChatArea({socket}) {
     } 
    
    
-    socket.off('receive-message').on('receive-message',(data)=>{
+    socket.off('receive-message').on('receive-message',(message)=>{
        const selectedChat = store.getState().usersReducer.selectedChat;
-       if (selectedChat._id===data.chat) {
-      // setAllMessages((prevMessages => [...prevMessages, data]));
+       if (selectedChat._id===message.chat) {
+      // setAllMessages((prevMessages => [...prevMessages, message]));
+      // console.log('Message received:', message);
       setAllMessages((prevMessages) => [...prevMessages, {
-      ...data,
-      chatId: data.chat,       // normalize for render
-      senderId: data.sender 
+      ...message,
+      chatId: message.chat,       // normalize for render
+      senderId: message.sender 
     }]);
        }
+       
+        if(selectedChat?._id===message.chat && message.sender !== user._id) {
+          clearUnreadMessages();
+        }
+    })
+
+    socket.off('message-count-cleared').on('message-count-cleared',(data)=>{
+      const selectedChat = store.getState().usersReducer.selectedChat;
+      const allChats = store.getState().usersReducer.allChats;
+
+      if(selectedChat?._id === data.chat) {
+        // updating unread count in chat list
+        const updatedChats = allChats.map((Chat) => {
+          if(Chat._id === data.chat){
+            return {
+              ...Chat,
+              unreadMessagesCount: 0
+            }
+          }
+          return Chat;
+      })
+      dispatch(setAllChats(updatedChats));
+      // updating read property in message object
+      setAllMessages(prev=>{
+        return prev.map(msg=>{
+          return {
+            ...msg,
+            read: true
+          }
+        })
+      })
+      }
     })
 
     // alert('useEffect called',d1);
