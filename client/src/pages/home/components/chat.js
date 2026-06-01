@@ -192,7 +192,9 @@ function ChatArea({socket}) {
             </div>
             })}  
             {isTyping && (
-              <div><i>typing...</i></div>
+              <div className="typing-indicator">
+                <i>typing...</i>
+              </div>
             )}
           </div>
           <div className="send-message-div">

@@ -26,6 +26,7 @@ app.use('/api/user', userRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/message', messageRouter);
 
+const onlineUsers = [];
 server.listen(port,()=>{
     console.log(`Example app listening at ${port}`);
 })
@@ -49,6 +50,13 @@ io.on('connection',(socket)=>{
     socket.on('user-typing',(data)=>{
         socket.to(data.members.filter(m=>m!==data.senderId)[0]).emit('started-typing',data);
         // console.log(data);
+    })
+    socket.on('user-login',(userId)=>{
+        if(!onlineUsers.includes(userId)){
+            onlineUsers.push(userId);
+        }
+        socket.emit('online-users',onlineUsers);
+
     })
 
     
