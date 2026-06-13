@@ -14,9 +14,9 @@ function Login() {
     async function onFormSubmit(e) {
         e.preventDefault(); 
         try{
-            dispatch(showLoader());
+            // dispatch(showLoader());
         const response = await loginUser(user);
-        dispatch(hideLoader()); 
+        // dispatch(hideLoader()); 
         if(response.success){
             localStorage.setItem('token', response.token);
             toast.success(response.message);
@@ -26,7 +26,7 @@ function Login() {
         }
         // console.log(user);  
         }catch(error){
-            dispatch(hideLoader());
+            // dispatch(hideLoader());
             toast.error('Something went wrong. Please try again later.');
         }  
     }

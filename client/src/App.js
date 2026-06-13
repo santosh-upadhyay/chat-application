@@ -8,6 +8,7 @@ import ProjectedRoute from "./components/protectedRoute";
 import Signup from "./pages/signup";
 import Loader from "./components/loader.js";
 import { useSelector } from "react-redux";
+import Profile from "./pages/profile/index.js";
 
 function App() {
   const loader = useSelector((state) => state.loaderReducer);
@@ -18,8 +19,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ProjectedRoute><Home /></ProjectedRoute>} />
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<Signup />} />
+          <Route path="/profile" element={<ProjectedRoute><Profile /></ProjectedRoute>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </BrowserRouter>
     </div>

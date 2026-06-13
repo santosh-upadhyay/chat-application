@@ -2,7 +2,8 @@ import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
 import { ApiError } from '../utils/ApiError.js';
 import ApiResponse from '../utils/ApiResponse.js';
- const createChat = async (req, res) => {
+
+const createChat = async (req, res) => {
     try {
         // const { participants } = req.body;
         const chat  = new Chat(req.body)
@@ -18,7 +19,6 @@ import ApiResponse from '../utils/ApiResponse.js';
     }
 }
 
-
 const getAllChats = async (req, res) => {
     try{
         const chats = await Chat.find({members: {$in: [req.user._id]}})
@@ -31,7 +31,7 @@ const getAllChats = async (req, res) => {
     } catch(error){
         res.status(500).json(new ApiError(500,"server error", error, error.stack))
     }
-    }
+}
 
 const clearUnreadMessageCount = async (req, res) => {
     try {

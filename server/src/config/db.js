@@ -5,9 +5,12 @@ const connectDB = async () => {
         mongoose.connection.on('connected', () => {
         console.log('DB Connected');
     })
-         await mongoose.connect(`${process.env.MONGODB_URI}/chatApp`)
-        // await mongoose.connect(process.env.MONGODB_URI+process.env.DATABASE_NAME, {
-    
+    console.log('Connecting to MongoDB...');
+    console.log(process.env.MONGODB_URI);
+        await mongoose.connect(process.env.MONGODB_URI, {
+            // useNewUrlParser: true,
+            // useUnifiedTopology: true,
+        });
         // const db = mongoose.connection;
         
         // console.log('MongoDB connected successfully');

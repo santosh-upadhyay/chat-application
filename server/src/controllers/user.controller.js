@@ -1,3 +1,4 @@
+import cloudinary from "../../cloudinary.js";
 import User from "../models/user.model.js";
 import validator from 'validator';
 // import valdator from 'validator';
@@ -20,7 +21,7 @@ const loginUser = async( req, res) => {
     if(!isPasswordCorrect){
         return res.status(400).json({success:false, message:"Invalid email or password credentials"});    
     }
-//    console.log(process.env.JWT_SECRET_KEY);
+
         const token = user.generateToken();
 //  console.log(user);
     return res.json({success:true, message:"User logged in successfully", token, status:200});
@@ -37,7 +38,7 @@ const loginUser = async( req, res) => {
 const registerUser = async(req, res) => {
     try{
     const{firstname,lastname,email,password} = req.body;
-    console.log(firstname,lastname,email,password);
+    // console.log(firstname,lastname,email,password);
     if(!firstname || !lastname || !email || !password){
        return res.status(400).json({message:"Please fill all the fields"});
     }
@@ -97,9 +98,30 @@ const getAllUsers = async(req,res) => {
         return res.status(500).json({success:false, message:"Internal server error"});
     }       
 }
+
+const uploadProfilePic = async(req,res) => {
+    try {
+        const {image} = req.body;
+        if(!image){
+            return res.status(400).json({success:false, message:"Please provide an image"});
+        }
+        // Upload the image to cloudinary and get the URL
+        const imageUrl = await cloudinary.uploader.upload(image,{folder:'quick-chat'})
+
+        // update the model of the user  & set profile pic property
+        await User.findByIdAndUpdate(req.user._id, { profilePic: imageUrl.secure_url }, { new: true });
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({success:false, message:"Internal server error"});
+    }
+
+}
 export {
     registerUser,
     loginUser,
     getCUrrentUser,
-    getAllUsers
+    getAllUsers,
+    uploadProfilePic
 }

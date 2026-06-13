@@ -17,9 +17,9 @@ function Signup() {
     async function onFormSubmit(e) {
         e.preventDefault();
         try{
-            dispatch(showLoader());
+            // dispatch(showLoader());
             const response = await signupUser(user);
-            dispatch(hideLoader());
+            // dispatch(hideLoader());
             if(response.success){
                 toast.success(response.message);
             }else{
@@ -27,7 +27,7 @@ function Signup() {
             }
             
         }catch(error){
-            dispatch(hideLoader());
+            // dispatch(hideLoader());
             toast.error('Something went wrong. Please try again later.');
         }
     }

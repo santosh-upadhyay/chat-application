@@ -20,9 +20,9 @@ function UsersList({ users, searchKey, setSearchKey, socket, onlineUsers }) {
   // start new chat with searched user
   const startNewChat = async (searchedUserId) => {
     try {
-      dispatch(showLoader());
+      // dispatch(showLoader());
       const response = await createNewChat([currentUser._id, searchedUserId]);
-      dispatch(hideLoader());
+      // dispatch(hideLoader());
       if (response.success) {
         toast.success(response.message);
         const newChat = response.data;
@@ -30,7 +30,7 @@ function UsersList({ users, searchKey, setSearchKey, socket, onlineUsers }) {
         dispatch(setSelectedChat(newChat));
       }
     } catch (error) {
-      dispatch(hideLoader());
+      // dispatch(hideLoader());
       toast.error(error.message);
     }
   };
@@ -83,7 +83,7 @@ function UsersList({ users, searchKey, setSearchKey, socket, onlineUsers }) {
                 lastMessage: message,
               }
             }
-            console.log(Chat);
+            // console.log(Chat);
             return Chat;
         })
         dispatch(setAllChats(updatedChats));

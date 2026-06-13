@@ -15,9 +15,9 @@ function ProjectedRoute({ children }) {
 
     const getLoggedInUser = async() => {
         try{
-            dispatch(showLoader());
+            // dispatch(showLoader());
             const response = await getLoggedUser();
-            dispatch(hideLoader());
+            // dispatch(hideLoader());
             if(response.success){
                 dispatch(setUser(response.data));
                 // document.write("Welcome "+response.data.firstname);
@@ -28,16 +28,16 @@ function ProjectedRoute({ children }) {
             }
         }catch(error){
             // toast.error('Failed to fetch user details');
-            dispatch(hideLoader());
+            // dispatch(hideLoader());
             navigate('/login');
         }
     }
 
     const getAllUsers1 = async() => {
         try{
-            dispatch(showLoader());
+            // dispatch(showLoader());
             const response = await getAllUsers();
-            dispatch(hideLoader());
+            // dispatch(hideLoader());
             if(response.success){
                 dispatch(setAllUsers(response.data));
                 // document.write("Welcome "+response.data.firstname);
@@ -55,9 +55,9 @@ function ProjectedRoute({ children }) {
 
     const getAllUserChats = async() => {
         try{
-            dispatch(showLoader());
+            // dispatch(showLoader());
             const response = await getAllChats();
-            dispatch(hideLoader());
+            // dispatch(hideLoader());
             if(response.success){
                 dispatch(setAllChats(response.data));
                 // document.write("Welcome "+response.data.firstname);
@@ -68,7 +68,7 @@ function ProjectedRoute({ children }) {
             }
         }catch(error){
             // toast.error('Failed to fetch user details');
-            dispatch(hideLoader());
+            // dispatch(hideLoader());
             navigate('/login');
         }
     }

@@ -29,7 +29,8 @@ body{
 }
 
 .container-back-color{
-  background-color: #e74c3c;
+  /* background-color:; */
+
   opacity: 0.7;
   width: 100%;
   height: 100%;
@@ -93,7 +94,7 @@ body{
 
 
 .form button {
-  background-color: #e74c3c;
+  background-color: #90e08d;
   color: #ffffff;
   font-size: 16px;
   outline: none;
@@ -142,7 +143,7 @@ body{
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(231,76,60,0.7); /* Black background with opacity */
+  background-color: rgba(159, 191, 192, 0.7); /* Black background with opacity */
   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
   align-items: center;
   display: flex;
@@ -190,7 +191,7 @@ body{
 ********CSS FOR HOME PAGE*******************************
 ********************************************************/
 .home-page{
-  background-color: #fdedec;
+  /* background-color: #fdedec; */
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -245,7 +246,7 @@ i{
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #e74c3c;
+  background-color: #aeeb8a;
   color: white;
   font-size: 20px;
   font-weight: bold;
@@ -286,7 +287,7 @@ i{
   position: absolute;
   right: 10px;
   font-size: 25px;
-  color: #e74c3c;
+  color: #4ae73c;
 }
 
 
@@ -305,7 +306,7 @@ i{
   padding: 10px 10px;
   color: white;
   cursor: pointer;
-  background-color: #e74c3c;
+  background-color: #af9e9c;
 }
 
 .filter-user-display{
@@ -336,12 +337,12 @@ i{
   line-height: 50px;
 }
 .user-default-avatar{
-  background-color: #e74c3c;
+  background-color: #26e630;
   color: white;
 }
 .user-selected-avatar{
   background-color: white;
-  color: #e74c3c;
+  color: #59eb54;
 }
 
 .user-start-chat{
@@ -351,7 +352,7 @@ i{
   padding: 10px 5px;
   border: none;
   border-radius: 3px;
-  background-color: #e74c3c;
+  background-color: #4ed449;
   color: white;
 }
 
@@ -378,7 +379,7 @@ i{
     border-bottom: #bbb 1px solid;
     text-align: right;
     font-weight: bold;
-    color: #e74c3c;
+    color: #727770;
 }
 
 /*******************************************************
@@ -409,7 +410,7 @@ i{
   position: absolute;
   right: 10px;
   font-size: 25px;
-  color: #e74c3c;
+  color: #25db3b;
   cursor: pointer;
   border: none;
   background-color: transparent;
@@ -420,7 +421,7 @@ i{
   position: absolute;
   right: 50px;
   font-size: 25px;
-  color: #e74c3c;
+  color: #6d6c6c;
   cursor: pointer;
   border: none;
   background-color: transparent;
@@ -431,7 +432,7 @@ i{
   position: absolute;
   right: 80px;
   font-size: 25px;
-  color: #e74c3c;
+  color: #838180;
   cursor: pointer;
   border: none;
   background-color: transparent;
@@ -453,13 +454,13 @@ i{
 
 /* Handle */
 .main-chat-area::-webkit-scrollbar-thumb {
-  background: #e74c3c; 
+  background: #585858; 
   border-radius: 10px;
 }
 
 /* Handle on hover */
 .main-chat-area::-webkit-scrollbar-thumb:hover {
-  background: #e74c3c; 
+  background: #757474; 
 }
 
 /*******************************************************
@@ -477,15 +478,15 @@ i{
 }
 
 .send-message{ 
-    background-color: #e74c3c;
+    background-color: #87ca7a;
     color: white;
     margin-left: 100px;
     border-top-right-radius: 0px;
 }
 
 .received-message{ 
-    background-color: #ddd;
-    color: #28282B;
+    background-color: #615e5e;
+    color: #f7faf7;
     margin-right: 100px;
     border-bottom-left-radius: 0px;
 }
@@ -525,9 +526,9 @@ i{
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background-color: #e74c3c;
+  background-color: #2bf367;
   font-weight: bold;
-  color: white;
+  color: rgb(128, 125, 125);
 }
 
 
@@ -609,7 +610,7 @@ input[type="file"]::file-selector-button:active {
 
 .logout-button{
   background-color: transparent;
-  color:#e74c3c ;
+  color:#3ce73c ;
   border: none;
   font-size: 18px;
   cursor: pointer;
