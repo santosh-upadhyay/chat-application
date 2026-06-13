@@ -16,7 +16,9 @@ const port = process.env.PORT_NUMBER || 5000;
 
 connectDB();
 
-app.use(express.json());
+app.use(express.json({
+    limit:'10mb'
+}));
 const server = http.createServer(app);
 
 const io = new Server(server,{

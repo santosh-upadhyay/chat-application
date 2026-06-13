@@ -24,4 +24,15 @@ const getAllUsers = async () => {
     }       
 }
 
-export { getLoggedUser, getAllUsers }
+const uploadProfilePic = async (image) => {
+    try {
+        const response = await axiosInstance.post('/api/user/upload-profile-pic', { image });
+        return response.data;
+    } catch (error) {
+        console.error("Error uploading profile picture:", error);
+        throw error;
+    }
+
+}
+
+export { getLoggedUser, getAllUsers, uploadProfilePic };

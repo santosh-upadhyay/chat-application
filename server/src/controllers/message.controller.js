@@ -12,7 +12,9 @@ const createmessage = async (req, res) => {
     const newMessage = new Message({
       chatId: message.chat,
       senderId: message.sender,
+
       text: message.text,
+      image: message.image
     });
     const savedMessage = await newMessage.save();
 

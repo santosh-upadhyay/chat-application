@@ -43,7 +43,7 @@ const clearUnreadMessageCount = async (req, res) => {
         }
         // chat.unreadMessages = 0;
         const updatedChat = await Chat.findByIdAndUpdate(chatId, 
-            { $set: { unreadMessagesCount: 0 } }, { new: true }).populate("members", "-password").populate('lastMessage');
+            { $set: { unreadMessagesCount: 0 } }, { returnDocument: 'after' }).populate("members", "-password").populate('lastMessage');
 
         // we want to update the read property to true in message collection
         await Message.updateMany({chatId,read:false}, {$set:{read:true}})

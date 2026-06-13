@@ -101,19 +101,19 @@ const getAllUsers = async(req,res) => {
 
 const uploadProfilePic = async(req,res) => {
     try {
-        const {image} = req.body;
-        if(!image){
+        const {image,user} = req.body;
+        if(!image){ 
             return res.status(400).json({success:false, message:"Please provide an image"});
         }
         // Upload the image to cloudinary and get the URL
         const imageUrl = await cloudinary.uploader.upload(image,{folder:'quick-chat'})
 
         // update the model of the user  & set profile pic property
-        await User.findByIdAndUpdate(req.user._id, { profilePic: imageUrl.secure_url }, { new: true });
-
+        await User.findByIdAndUpdate(req.user._id, { profilePic: imageUrl.secure_url }, { returnDocument: 'after' });
+        res.status(200).json({success:true, message:"Profile picture uploaded successfully", data:user});
 
     } catch (error) {
-        console.log(error);
+        console.log("pnjnjjk");
         return res.status(500).json({success:false, message:"Internal server error"});
     }
 
