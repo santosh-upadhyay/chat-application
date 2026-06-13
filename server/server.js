@@ -64,6 +64,10 @@ io.on('connection',(socket)=>{
         socket.emit('online-users',onlineUsers);
 
     })
+    socket.on('user-logout',(userId)=>{
+        onlineUsers.splice(onlineUsers.indexOf(userId),1);
+        socket.emit('online-users-updated',onlineUsers);
+    })
 
     
 })

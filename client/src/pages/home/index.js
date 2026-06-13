@@ -15,7 +15,11 @@ function Home() {
       socket.emit('join-room',user._id);
       socket.emit('user-login',user._id);
       socket.on('online-users',(onlineUsers)=>{
-        console.log('Online users:', onlineUsers);
+        // console.log('Online users:', onlineUsers);
+        setOnlineUsers(onlineUsers);
+      });
+      socket.on('online-users-updated',(onlineUsers)=>{
+        // console.log('Online users updated:', onlineUsers);
         setOnlineUsers(onlineUsers);
       });
     }
@@ -23,7 +27,7 @@ function Home() {
 
   return (
     <div className="home-page">
-      <Header></Header>
+      <Header socket={socket}></Header>
       <div className="main-content">
         <Sidebar socket={socket} onlineUsers={onlineUsers}></Sidebar>
         {selectedChat && <ChatArea socket={socket}></ChatArea>}
