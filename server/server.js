@@ -16,7 +16,13 @@ import cors from 'cors'
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 const port = process.env.PORT_NUMBER || 5000;
-app.use(cors())
+app.use(cors(
+    {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}
+))
 connectDB();
 
 app.use(express.json({
@@ -26,7 +32,8 @@ const server = http.createServer(app);
 
 const io = new Server(server,{
     cors:{
-        origin:'http://localhost:3000',
+        // origin:'http://localhost:3000',
+        origin:'*',
         methods:['GET','POST']
     }
 });
