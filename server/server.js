@@ -10,10 +10,13 @@ import http from 'http';
 import { Server } from 'socket.io';
 dotenv.config("./.env");
 import dns from 'dns';
+import cors from 'cors'
 // Change DNS
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
-const port = process.env.PORT_NUMBER || 5000;
 
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+
+const port = process.env.PORT_NUMBER || 5000;
+app.use(cors())
 connectDB();
 
 app.use(express.json({
