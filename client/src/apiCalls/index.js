@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-export const url = "https://chat-application-server-lmvk.onrender.com"||"http://localhost:5000";
+export const url = "https://chat-application-server-lmvk.onrender.com"
+// ||"http://localhost:5000";
 export const axiosInstance = axios.create({
     headers: {}
 });

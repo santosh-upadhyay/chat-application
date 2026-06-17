@@ -6,6 +6,7 @@ import {io} from 'socket.io-client';
 import { useEffect, useState } from "react";
 
 const socket = io('https://chat-application-server-lmvk.onrender.com');
+                    
 function Home() {
   const { selectedChat,user } = useSelector((state) => state.usersReducer);
   const [onlineUsers,setOnlineUsers] = useState([]);
