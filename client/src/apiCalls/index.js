@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+export const url = "https://chat-application-server-lmvk.onrender.com";
 export const axiosInstance = axios.create({
     headers: {}
 });

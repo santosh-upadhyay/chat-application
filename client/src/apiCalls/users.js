@@ -1,9 +1,9 @@
-import { axiosInstance } from "./";
+import { axiosInstance,url } from "./";
 
 const getLoggedUser = async () => {  
     try {
         // alert("get logged user called");
-        const response = await axiosInstance.get('/api/user/profile');
+        const response = await axiosInstance.get(url+'/api/user/profile');
         // console.log(response.data);
         // alert(response.data.message);
         return response.data;
@@ -15,7 +15,7 @@ const getLoggedUser = async () => {
 const getAllUsers = async () => {  
     try {
         // alert("get logged user called");
-        const response = await axiosInstance.get('/api/user/users');
+        const response = await axiosInstance.get(url+'/api/user/users');
         // console.log(response.data);
         // alert(response.data.message);
         return response.data;
@@ -26,7 +26,7 @@ const getAllUsers = async () => {
 
 const uploadProfilePic = async (image) => {
     try {
-        const response = await axiosInstance.post('/api/user/upload-profile-pic', { image });
+        const response = await axiosInstance.post(url+'/api/user/upload-profile-pic', { image });
         return response.data;
     } catch (error) {
         console.error("Error uploading profile picture:", error);
