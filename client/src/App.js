@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter,HashRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/home";
 import Login from "./pages/login";
@@ -16,14 +16,14 @@ function App() {
     <div className="App">
       <Toaster position="top-center" reverseOrder={false} />
       {!loader && <Loader />}
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<ProjectedRoute><Home /></ProjectedRoute>} />
           <Route path="/profile" element={<ProjectedRoute><Profile /></ProjectedRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }
